@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class AutoreController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/autori")
-    public Autore create(@RequestBody @Validated AutoreDTO autoreDTO, BindingResult validation) throws BadRequestException {
+    public Autore create(@RequestBody @Validated AutoreDTO autoreDTO, BindingResult validation) throws BadRequestException, UnsupportedEncodingException {
         if (validation.hasErrors()) throw new BadRequestException(AppConfig.generateValidationErrorMessage(validation));
         return autoreSvc.create(autoreDTO);
     }

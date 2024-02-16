@@ -7,6 +7,7 @@ import it.epicode.w6d4.exceptions.ConstraintReferenceError;
 import it.epicode.w6d4.exceptions.NotFoundException;
 import it.epicode.w6d4.exceptions.PaginationSearchException;
 import it.epicode.w6d4.repositories.AutoreRepository;
+import jakarta.mail.internet.InternetAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -39,16 +41,17 @@ public class AutoreService {
         return autoreRp.findById(id).orElseThrow(() -> new NotFoundException("Author with id = " + id + " not found"));
     }
 
-    private void sendWelcomeEmail(String to, String nome) {
+    private void sendWelcomeEmail(String to, String nome) throws UnsupportedEncodingException {
 
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(to);
+        msg.setFrom("Admin <giuliomarinelli25@gmail.com>");
         msg.setSubject("Welcome to our service");
         msg.setText("Hello " + nome + ", We are proud to tell you that a new adventure begun since you subscribed to our API.\n\n Have a nice day!\n\n Admin");
         javaMailSender.send(msg);
     }
 
-    public Autore create(AutoreDTO autoreDTO) throws ConstraintReferenceError {
+    public Autore create(AutoreDTO autoreDTO) throws ConstraintReferenceError, UnsupportedEncodingException {
         Autore a = new Autore(autoreDTO.nome(), autoreDTO.cognome(), autoreDTO.email(),
                 LocalDate.parse(autoreDTO.dataDiNascita()));
         try {

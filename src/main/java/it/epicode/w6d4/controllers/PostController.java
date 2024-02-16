@@ -57,6 +57,7 @@ public class PostController {
     @PatchMapping("/post/{id}/upload-cover")
     public Post upload(@PathVariable UUID id, @RequestParam("upload-cover") MultipartFile file) throws IOException, BadRequestException, NotFoundException {
         String url = (String) cloudinary.uploader().upload(file.getBytes(), new HashMap()).get("url");
+        System.out.println(file.getName());
         return postSvc.uploadCover(id, url);
 
     }
